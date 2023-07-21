@@ -1,0 +1,9 @@
+node_modules
+.idea
+.vscode
+go-cqhttp/*
+!**/.gitkeep
+
+.DS_Store
+
+**/db.sqlite

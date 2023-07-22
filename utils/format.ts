@@ -1,4 +1,4 @@
-import cqCode, { CQCodeData, CQCodeObj, CQCodeType } from "./bot/cq-code";
+import cqCode, { CQCodeObj, CQCodeType } from "./bot/cq-code";
 
 const cqMsgRegex = /\[CQ:(.*?)\]/g;
 

@@ -7,3 +7,4 @@ go-cqhttp/*
 .DS_Store
 
 **/db.sqlite
+config.ts

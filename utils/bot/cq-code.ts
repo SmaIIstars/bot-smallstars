@@ -34,7 +34,7 @@ type CQCodeReply = {
   seq?: number;
 };
 
-export type CQCodeObj<T extends CQCodeType> = {
+export type CQCodeObj<T extends CQCodeType = CQCodeType> = {
   type: T;
   data: CQCodeData[T];
 };

@@ -13,4 +13,5 @@ export type Plugin = (props: PluginProps) => any;
 export enum pluginPath {
   CheckIn = "./plugin/check-in",
   RobotTest = "./plugin/robot-test",
+  Schedule = "./plugin/schedule",
 }

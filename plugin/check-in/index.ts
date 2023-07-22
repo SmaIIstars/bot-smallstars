@@ -1,13 +1,12 @@
-import schedule from "node-schedule";
-import { isDev } from "../../utils";
+import { isAtAndHitKeyword, isDev } from "../../utils";
 import { cqMsgFormat } from "../../utils/format";
 import { messageFilter } from "../../utils/filter";
 import { Plugin } from "../../plugin";
-import useStore from "../../store";
 import cqCode from "../../utils/bot/cq-code";
 import config from "../../config";
+import { schedule } from "../../utils/schedule";
 
-const WHITE_WORDS = ["签到", "簽到", "check-in"];
+const KEYWORDS = ["签到", "簽到", "check-in"];
 const DAILY_IMAGE_API = `https://t.mwm.moe/pc`;
 
 // "https://imgapi.cn/api.php?fl=dongman&gs=images"
@@ -15,7 +14,7 @@ const DAILY_IMAGE_API = `https://t.mwm.moe/pc`;
 // "https://www.dmoe.cc/random.php";
 
 const checkInList: number[] = [];
-const listClearJob = schedule.scheduleJob("0 0 5 * * *", () => {
+schedule.add("check-in-list-clear", "0 0 5 * * *", () => {
   checkInList.length = 0;
 });
 
@@ -27,35 +26,7 @@ const plugin: Plugin = async ({ ws, http, data }) => {
   )
     return;
 
-  const msg = cqMsgFormat(data?.message ?? "");
-  const [getStore] = useStore();
-
-  const flags = msg.reduce<[boolean, boolean]>(
-    (pre, cur) => {
-      if (
-        cur.type === "at" &&
-        Number(Reflect.get(cur.data, "qq")) === getStore().botInfo.qq
-      ) {
-        pre[0] = true;
-        return pre;
-      }
-
-      if (cur.type === "text") {
-        const text = Reflect.get(cur.data, "text") ?? "";
-        if (!text) return pre;
-
-        for (const word of WHITE_WORDS) {
-          if (text.includes(word)) {
-            pre[1] = true;
-            return pre;
-          }
-        }
-      }
-
-      return pre;
-    },
-    [false, false]
-  );
+  const flags = isAtAndHitKeyword(cqMsgFormat(data?.message ?? ""), KEYWORDS);
 
   if (!flags.some((v) => !v)) {
     if (

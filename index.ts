@@ -4,7 +4,6 @@ import { http } from "./utils/axios";
 import safeJSONParse from "./utils/safe-json-parse";
 import config from "./config";
 import { Plugin } from "./plugin";
-import { messageFilter } from "./utils/filter";
 import { getLoginInfo } from "./server/bot";
 import { isDev } from "./utils";
 import cqCode from "./utils/bot/cq-code";
@@ -16,10 +15,6 @@ const listen = (data: string) => {
   const JsonData = safeJSONParse(data, (err) => {
     console.log("JSON.parse failed", err);
   });
-
-  // if (isDev && messageFilter(JsonData, [], ["meta_event"])) {
-  //   console.log("JsonData", JsonData);
-  // }
 
   config.plugins.forEach((p) => {
     import(p.path).then((plugin) => {
